@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -9,12 +10,63 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const registerAccount = () => {
+    if (email === "" || password === "" || username === "") {
+      Alert.alert(
+        "Invalid Details",
+        "Please fill all the details to continute",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancelled"),
+            style: "cancel",
+          },
+          {
+            text: "Ok",
+            onPress: () => console.log("Ok"),
+            style: "destructive",
+          },
+        ]
+      );
+    } else {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const uid = user.uid;
+          setDoc(doc(db, "users", `${uid}`), {
+            username: username,
+            email: email,
+          });
+          Alert.alert(
+            "Success",
+            "Your account has been created successfully. Login to continute",
+            [
+              {
+                text: "Ok",
+                style: "cancel",
+              },
+            ]
+          );
+          navigation.navigate("Login");
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          Alert.alert("Error", errorMessage);
+          console.log(errorMessage);
+        });
+    }
+  };
+
   return (
     <View
       style={{
@@ -56,9 +108,12 @@ export default function RegisterScreen() {
         </View>
         <View style={{ width: 300, marginTop: 20 }}>
           <TextInput
-            value={email}
-            onChangeText={(email) => setEmail(email)}
             placeholder="Email"
+            autoCorrect={false}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            autoCapitalize="none"
             placeholderTextColor={"white"}
             style={{
               color: "white",
@@ -75,6 +130,8 @@ export default function RegisterScreen() {
           <TextInput
             value={password}
             onChangeText={(password) => setPassword(password)}
+            autoCapitalize="none"
+            autoCorrect={false}
             placeholder="Password"
             secureTextEntry
             placeholderTextColor={"white"}
@@ -91,6 +148,7 @@ export default function RegisterScreen() {
         </View>
         <View style={{ width: 300, marginTop: 20 }}>
           <TouchableOpacity
+            onPress={registerAccount}
             style={{
               borderWidth: 1,
               borderColor: password.length > 8 ? "red" : "white",
