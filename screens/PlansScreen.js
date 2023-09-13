@@ -1,4 +1,5 @@
 import {
+  Alert,
   Dimensions,
   ScrollView,
   StyleSheet,
@@ -10,11 +11,37 @@ import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import plans from "../data/plans";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { useNavigation } from "@react-navigation/native";
 
 export default function PlansScreen() {
+  const navigation = useNavigation();
   const [selectedPlan, setSelectedPlan] = useState("Mobile");
   const [price, setPrice] = useState(199);
   console.log(selectedPlan, price);
+  const user = auth.currentUser.uid;
+
+  const userPlan = async () => {
+    Alert.alert("Plan Activated", "Your Account has been setup successfully.", [
+      {
+        text: "Ok",
+        style: "default",
+      },
+    ]);
+    navigation.navigate("Home");
+
+    await setDoc(
+      doc(db, "users", `${user}`),
+      {
+        subscription: selectedPlan,
+        pricePaid: price,
+      },
+      {
+        merge: true,
+      }
+    );
+  };
   return (
     <>
       <View
@@ -178,28 +205,31 @@ export default function PlansScreen() {
         </ScrollView>
       </View>
 
-      <TouchableOpacity
-        style={{
-          backgroundColor: "#e50914",
-          paddingVertical: 10,
-          paddingTop: 10,
-        }}
-      >
-        <View
+      {selectedPlan.length > 0 ? (
+        <TouchableOpacity
+          onPress={userPlan}
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            paddingVertical: 20,
-            backgroundColor: "#E50914",
+            backgroundColor: "#e50914",
+            paddingVertical: 10,
+            paddingTop: 10,
           }}
         >
-          <Text style={{ color: "white", fontSize: 18 }}>
-            Selected Plan {selectedPlan}
-          </Text>
-          <Text style={{ color: "white", fontSize: 18 }}>Pay ₹{price}</Text>
-        </View>
-      </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              backgroundColor: "#E50914",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Selected Plan {selectedPlan}
+            </Text>
+            <Text style={{ color: "white", fontSize: 18 }}>Pay ₹{price}</Text>
+          </View>
+        </TouchableOpacity>
+      ) : null}
     </>
   );
 }
