@@ -41,7 +41,7 @@ export default function LoginScreen() {
               sub.subscription === "Premium" ||
               sub.subscription === "Basic"
             ) {
-              navigation.navigate("Home");
+              navigation.navigate("Profile");
             } else {
               navigation.navigate("Plans");
             }

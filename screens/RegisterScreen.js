@@ -46,6 +46,7 @@ export default function RegisterScreen() {
           setDoc(doc(db, "users", `${uid}`), {
             username: username,
             email: email,
+            profile: [username],
           });
           Alert.alert(
             "Success",
