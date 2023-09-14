@@ -1,12 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  NativeModules,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { NativeModules, Platform, SafeAreaView } from "react-native";
 import StackNavigation from "./StackNavigation";
 
 export default function App() {

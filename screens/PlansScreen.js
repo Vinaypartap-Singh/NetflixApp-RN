@@ -1,6 +1,5 @@
 import {
   Alert,
-  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
