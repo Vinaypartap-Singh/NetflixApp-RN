@@ -20,29 +20,6 @@ export default function ProfileScreen() {
   const [profiles, setProfiles] = useState();
   const [loading, setLoading] = useState(false);
 
-  const profileImages = [
-    {
-      id: "0",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSd5_C49-HkFimzHQHqQwMLnCq4fHr1pgLtvw&usqp=CAU",
-    },
-    {
-      id: "1",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOQfOPr1m7jryKxiCFP4IShrr88EWnR2mZJQ&usqp=CAU",
-    },
-    {
-      id: "2",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPsVAeFlYeYOEUzb3TV1ML91_LPkkFML5lRQcMdr9nQu2CqO-WzT-RLmkM5_cOKvkaBkI&usqp=CAU",
-    },
-    {
-      id: "3",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-yQFL1YOsN3esm6p1jB1HT-Q6qKtxtZqh9LGwMDIgDCy-p54eMf8jdGSN6yZUeySqseA&usqp=CAU",
-    },
-  ];
-  console.log("Profiles: ", profiles);
   useEffect(() => {
     setLoading(true);
     const getData = async () => {
@@ -136,14 +113,14 @@ export default function ProfileScreen() {
               >
                 <Image
                   source={{
-                    uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPsVAeFlYeYOEUzb3TV1ML91_LPkkFML5lRQcMdr9nQu2CqO-WzT-RLmkM5_cOKvkaBkI&usqp=CAU",
+                    uri: data.Image,
                   }}
                   style={{ width: 90, height: 90, borderRadius: 20 }}
                 />
                 <Text
                   style={{ color: "white", marginTop: 10, fontWeight: "bold" }}
                 >
-                  {data}
+                  {data.Name}
                 </Text>
               </TouchableOpacity>
             );
