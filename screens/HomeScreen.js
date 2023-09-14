@@ -1,11 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import TrendingComp from "../components/TrendingComp";
+import Header from "../components/Header";
+import MovieRows from "../components/MoviesRows";
 
 export default function HomeScreen() {
+  const api = "9f0d60fb73ce2b261485d824070652f5";
   return (
-    <View style={{ flex: 1, backgroundColor: "black" }}>
-      <Text style={{ color: "white" }}>HomeScreen</Text>
-    </View>
+    <ScrollView
+      automaticallyAdjustContentInsets={true}
+      showsVerticalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "black", paddingHorizontal: 20 }}
+    >
+      <Header />
+      <TrendingComp />
+      <MovieRows />
+    </ScrollView>
   );
 }
 
